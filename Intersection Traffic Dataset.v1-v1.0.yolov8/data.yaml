@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 5
+names: ['bus', 'construction', 'cyclist', 'pedestrian', 'vehicle']
+
+roboflow:
+  workspace: my-workspace-wgvbc
+  project: intersection-traffic-dataset
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/my-workspace-wgvbc/intersection-traffic-dataset/dataset/1

@@ -1,0 +1,13 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.h5
+*.pt
+*.ipynb_checkpoints/
+.gradio/
+Results/
+output_result.jpg
+output_traffic_result.jpg
+test_data/
