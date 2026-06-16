@@ -1,67 +1,211 @@
-# Car Detection Project
+# Car Color Detection & Traffic Monitoring System
 
-This project contains code and dataset files for vehicle detection and color recognition.
+## Problem Statement
 
-## What is included
+Traffic monitoring systems play an important role in intelligent transportation and smart city applications. The objective of this project is to develop a machine learning-based system capable of:
 
-- `car_detection/` - detector code and project files
-- `CarD_1.ipynb` - notebook for experiments or training
-- `requirements.txt` - Python dependencies
-- `yolov8n.pt` - YOLOv8 model weights
-- `car_color_model.h5` - color recognition model weights
-- `Intersection Traffic Dataset.v1-v1.0.yolov8/` - dataset split for detection
-- `VCoR (Vehicle Color Recognition) Dataset/` - color recognition dataset
+* Detecting vehicles in traffic scenes.
+* Identifying the color of detected vehicles.
+* Counting the number of vehicles present.
+* Counting the number of pedestrians present.
+* Highlighting blue-colored vehicles with red bounding boxes.
+* Highlighting all other vehicles with blue bounding boxes.
+* Providing an interactive graphical user interface (GUI) for image upload and visualization.
 
-## Recommended GitHub setup
+This project combines object detection and image classification techniques to create a complete traffic analysis solution.
 
-1. Create a GitHub repository, e.g. `car_detection_project`
-2. Make sure `.gitignore` includes:
-   - `venv/`
-   - `__pycache__/`
-   - `*.pyc`, `*.pyo`, `*.pyd`
-   - `*.h5`, `*.pt`
-   - `.ipynb_checkpoints/`
-   - `.gradio/`
-   - generated output images like `output_result.jpg`
-3. If not already initialized, run:
-   ```powershell
-   git init
-   git add .
-   git commit -m "Initial commit"
-   ```
-4. Add the GitHub remote and push:
-   ```powershell
-   git remote add origin https://github.com/<your-username>/<repo-name>.git
-   git branch -M main
-   git push -u origin main
-   ```
+---
 
-## Recommended Git settings on Windows
+## Dataset
 
-To avoid line-ending warnings, set:
-```powershell
-git config core.autocrlf false
-```
+### 1. Vehicle Color Recognition Dataset (VCoR)
 
-Also keep `.gitattributes` in the repo with:
+The VCoR dataset was used to train the vehicle color classification model.
+
+#### Color Classes
+
+* Beige
+* Black
+* Blue
+* Brown
+* Gold
+* Green
+* Grey
+* Orange
+* Pink
+* Purple
+* Red
+* Silver
+* Tan
+* White
+* Yellow
+
+The dataset was divided into:
+
+* Training Set
+* Validation Set
+* Test Set
+
+### 2. Intersection Traffic Dataset
+
+The Intersection Traffic Dataset was used for testing the complete traffic monitoring pipeline. It contains traffic intersection images with vehicles, pedestrians, and traffic infrastructure.
+
+---
+
+## Methodology
+
+### Step 1: Data Preprocessing
+
+* Images were resized to 224 × 224 pixels.
+* Pixel values were normalized to the range [0,1].
+* TensorFlow ImageDataGenerator was used for efficient data loading.
+
+### Step 2: Vehicle Color Classification
+
+A MobileNetV2-based transfer learning model was implemented.
+
+#### Model Architecture
+
+* Base Model: MobileNetV2 (Pre-trained on ImageNet)
+* GlobalAveragePooling2D Layer
+* Dense Output Layer with Softmax Activation
+
+#### Why MobileNetV2?
+
+* Lightweight architecture
+* Fast training and inference
+* High performance with transfer learning
+* Suitable for real-time applications
+
+### Step 3: Vehicle and Pedestrian Detection
+
+YOLOv8 was used for object detection.
+
+#### Objects Detected
+
+* Cars
+* Pedestrians
+* Traffic-related objects
+
+#### Why YOLOv8?
+
+* State-of-the-art object detection model
+* High detection speed
+* Real-time performance
+* Accurate bounding box predictions
+
+### Step 4: Integration
+
+The complete pipeline works as follows:
+
+Traffic Image
+↓
+YOLOv8 Detection
+↓
+Vehicle Cropping
+↓
+Color Classification using MobileNetV2
+↓
+Apply Custom Bounding Box Logic
+↓
+Count Vehicles and Pedestrians
+↓
+Display Results
+
+### Custom Bounding Box Logic
+
+* Blue Vehicle → Red Bounding Box
+* Other Vehicle Colors → Blue Bounding Box
+
+### Step 5: GUI Development
+
+A Gradio-based GUI was developed to:
+
+* Upload traffic images
+* Preview input images
+* Display processed images
+* Visualize detected vehicles and pedestrians
+* Show color predictions and counts
+
+---
+
+## Results
+
+### Vehicle Color Classification
+
+Model Used:
+
+* MobileNetV2 Transfer Learning
+
+Test Accuracy:
+
+* 64.2%
+
+### Traffic Monitoring Output
+
+The system successfully:
+
+* Detects vehicles in traffic scenes.
+* Detects pedestrians.
+* Predicts vehicle colors.
+* Counts vehicles.
+* Counts pedestrians.
+* Highlights blue vehicles with red bounding boxes.
+* Highlights other vehicles with blue bounding boxes.
+
+### Sample Output Features
+
+* Vehicle Color Labels
+* Vehicle Count
+* Pedestrian Count
+* Color-Based Bounding Boxes
+* Interactive GUI Output
+
+---
+
+## Technologies Used
+
+* Python 3.11
+* TensorFlow
+* Keras
+* MobileNetV2
+* YOLOv8
+* OpenCV
+* NumPy
+* Matplotlib
+* Gradio
+* Jupyter Notebook
+
+---
+
+## Project Structure
+
 ```text
-* text=auto
-*.txt text eol=lf
-*.py text eol=lf
-*.md text eol=lf
-*.yaml text eol=lf
-*.yml text eol=lf
+car-color-detection-traffic-monitoring/
+│
+├── notebook.ipynb
+├── car_color_model.h5
+├── requirements.txt
+├── README.md
+├── screenshots/
+│   ├── output1.png
+│   ├── output2.png
+│   └── gui.png
+└── datasets/
 ```
 
-## Recreate the Python environment
+---
 
-Run:
-```powershell
-python -m pip install -r requirements.txt
-```
+## Future Improvements
 
-## Notes
+* Improve color classification accuracy through fine-tuning.
+* Support real-time video processing.
+* Add vehicle tracking across frames.
+* Deploy the application as a web service.
+* Integrate traffic analytics and reporting features.
 
-- Do not push `venv/` to GitHub.
-- Do not push large model weight files unless you intend to store them in Git LFS.
-- If you want the repository to remain small, keep model files outside the repo or add them via Git LFS.
+---
+
+## Conclusion
+
+This project demonstrates the integration of deep learning-based color classification and object detection techniques for traffic monitoring applications. By combining MobileNetV2 and YOLOv8, the system successfully detects vehicles and pedestrians, identifies vehicle colors, applies custom color-based visualization rules, and provides an interactive GUI for user-friendly operation.
